@@ -1,0 +1,258 @@
+:root {
+  --game-max-width: 600px;
+  --border-color-one: #f3f3f3;
+  --border-color-two: #d3d6da;
+  --bg-color-right: #65db5a;
+  --bg-color-wrong: #555755;
+  --bg-color-misplaced: #ffca1c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 60%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  color: #444;
+  line-height: 1.5;
+}
+
+#game {
+  width: 100%;
+  max-width: var(--game-max-width);
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 5;
+}
+
+header {
+  height: 60px;
+  display: flex;
+  border-bottom: 1px solid;
+  border-color: var(--border-color-two);
+}
+
+header .title {
+  font-weight: 700;
+  font-size: 36px;
+  letter-spacing: 0.2rem;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  vertical-align: middle;
+}
+
+.input--container {
+  width: 75%;
+  height: 500px;
+  margin: 1.5rem auto 4rem auto;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 5px;
+  position: relative;
+  z-index: 2;
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 5px;
+}
+
+.cell {
+  text-align: center;
+  border-color: var(--border-color-two);
+  border-style: groove;
+  border-width: medium;
+  text-transform: uppercase;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: bold;
+  transition: transform 0.3s;
+}
+
+.img-help {
+  position: absolute;
+  top: 1.2rem;
+}
+
+.img-help:hover {
+  cursor: pointer;
+}
+
+.instructions {
+  font-size: 20px;
+}
+
+.rules--modal {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+  width: 70%;
+
+  background-color: white;
+  color: black;
+  padding: 5rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.close--modal {
+  position: absolute;
+  top: 1.2rem;
+  right: 2rem;
+  font-size: 3rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.examples {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: var(--border-color-two);
+  top: 5rem;
+  bottom: 5rem;
+}
+
+.example--tile {
+  display: inline-block;
+  width: 40px;
+  height: 100%;
+  border-color: var(--border-color-two);
+  border-style: solid;
+  border-width: thick;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.correct {
+  background-color: var(--bg-color-right);
+  border-color: var(--bg-color-right);
+  color: white;
+}
+
+.wrong {
+  background-color: var(--bg-color-wrong);
+  border-color: var(--bg-color-wrong);
+  color: white;
+}
+
+.misplaced {
+  background-color: var(--bg-color-misplaced);
+  border-color: var(--bg-color-misplaced);
+  color: white;
+}
+
+.flip {
+  transform: rotateX(360deg);
+}
+
+.keyboard--row {
+  display: flex;
+  width: 100%;
+  margin: 0 auto 8px;
+}
+
+.keyboard--btn.correct {
+  background-color: var(--bg-color-right);
+  border-color: var(--bg-color-right);
+  color: white;
+}
+
+.keyboard--btn.wrong {
+  background-color: var(--bg-color-wrong);
+  border-color: var(--bg-color-wrong);
+  color: white;
+}
+
+.keyboard--btn.misplaced {
+  background-color: var(--bg-color-misplaced);
+  border-color: var(--bg-color-misplaced);
+  color: white;
+}
+
+.keyboard--btn {
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 0 6px 0 0;
+  height: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #cdcdcd;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  font-size: initial;
+  border: none;
+}
+
+.alert {
+  left: 0;
+  margin: 5% auto;
+  max-width: calc(var(--game-max-width) * 0.45);
+  position: fixed;
+  right: 0;
+  text-align: center;
+  top: 200px;
+  z-index: 1000;
+}
+
+.alert--message {
+  display: none;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  background-color: black;
+  border-radius: 10px;
+}
+
+.feedback--modal {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+  width: 30%;
+
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  padding: 5rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+p.center {
+  font-size: 20px;
+  text-align: center;
+}
