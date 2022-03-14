@@ -13,6 +13,8 @@ const keyboard = document.querySelector('.keyboard');
 const exampleTiles = document.querySelectorAll('.example--tile');
 const alertMsg = document.querySelector('.alert--message');
 const feedback = document.querySelector('.feedback');
+const statsModal = document.querySelector('.stats--modal');
+const btnStats = document.querySelector('.img-stats');
 
 let currentTile = 0;
 let answer = '';
@@ -21,6 +23,7 @@ let numberOfTrails = 6;
 let currentRowNumber = 0;
 let state = 'empty';
 let reset = false;
+let statsMap = new Map();
 
 function createTiles() {
   inputContainer.innerHTML = '';
@@ -82,23 +85,51 @@ function answerGenerator() {
   answer = answerList[Math.trunc(Math.random() * answerList.length + 1)];
 }
 
+//Creating statistics modal
+function createStatsModal() {
+  statsMap.set('Played', 0);
+  statsMap.set('Wins', 0);
+  statsMap.set('Current Streak', 0);
+  statsMap.set('Max Streak', 0);
+  statsModal.innerHTML = '';
+  let i = 0;
+  const html = `<button class="close--modal close--stats">X</button>
+  <h2>
+    <center>STATISTICS</center>
+  </h2>
+  <br />
+  <div class="stats--container"></div>`;
+  statsModal.insertAdjacentHTML('beforeend', html);
+  for (const [label, value] of statsMap.entries()) {
+    document.querySelector('.stats--container').insertAdjacentHTML(
+      'beforeend',
+      `<div class="stat--item">
+        <div class="value" data-index=${i++}>${value}</div>
+        <div class="label" data-index=${i}>${label}</div>
+      </div>`
+    );
+  }
+}
+
 let gridCells;
 let currentRow;
 
 function init() {
   createTiles();
   createKeyboard();
-  if (!reset) showRulesModal();
   currentTile = 0;
   currentRowNumber = 0;
   state = 'playing';
   answerGenerator();
   gridCells = document.querySelectorAll('.cell');
   currentRow = document.querySelector('.input--0');
-  if (!reset)
+  if (!reset) {
+    showRulesModal();
     document
       .querySelectorAll('.keyboard--btn')
       .forEach(key => key.classList.remove('wrong', 'correct', 'misplaced'));
+    createStatsModal();
+  }
 }
 init();
 
@@ -106,7 +137,44 @@ btnRules.addEventListener('click', showRulesModal);
 btnCloseRules.addEventListener('click', hideRulesModal);
 overlay.addEventListener('click', () => {
   if (!modalRules.classList.contains('hidden')) hideRulesModal();
+  if (!statsModal.classList.contains('hidden')) hideStatsModal();
 });
+
+const hideStatsModal = function() {
+  statsModal.classList.add('hidden');
+  overlay.classList.add('hidden');
+};
+
+const showStatsModal = function() {
+  statsModal.classList.remove('hidden');
+  overlay.classList.remove('hidden');
+};
+
+document
+  .querySelector('.close--stats')
+  .addEventListener('click', hideStatsModal);
+btnStats.addEventListener('click', showStatsModal);
+
+//Update stats modal
+const updateStatsModal = function(isWin) {
+  const statsArray = Array.from(statsMap.values());
+  statsMap.set('Played', ++statsArray[0]);
+  if (isWin) {
+    statsMap.set('Wins', ++statsArray[1]);
+    statsMap.set('Current Streak', ++statsArray[2]);
+  }
+  if (statsArray[3] < statsArray[2]) {
+    statsMap.set('Max Streak', statsArray[2]);
+    statsArray[3] = statsArray[2];
+  }
+  if (!isWin) {
+    statsMap.set('Current Streak', 0);
+    statsArray[2] = 0;
+  }
+  document.querySelectorAll('.value').forEach(stat => {
+    stat.textContent = statsArray[stat.dataset.index];
+  });
+};
 
 //Feedback modal
 const createFeedbackModal = function() {
@@ -269,12 +337,14 @@ function enterPressed() {
     if (tempWord === answer) {
       state = 'win';
       displayConfetti();
+      updateStatsModal(true);
       showFeedbackModal();
     }
     if (currentRowNumber < numberOfTrails - 1) {
       currentRow = document.querySelector(`.input--${++currentRowNumber}`);
     } else if (state !== 'win') {
       state = 'lose';
+      updateStatsModal(false);
       showFeedbackModal();
     }
   }
@@ -283,6 +353,7 @@ function enterPressed() {
 window.addEventListener('keydown', function(e) {
   if (e.keyCode === 27) {
     if (!modalRules.classList.contains('hidden')) hideRulesModal();
+    if (!statsModal.classList.contains('hidden')) hideStatsModal();
     return;
   }
   if (e.keyCode === 13) {

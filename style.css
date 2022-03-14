@@ -103,8 +103,18 @@ header .title {
   top: 1.2rem;
 }
 
-.img-help:hover {
+.menu--right {
+  display: flex;
+  width: 50px;
+  justify-content: flex-end;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.img-stats {
+  top: 1.2rem;
   cursor: pointer;
+  position: absolute;
 }
 
 .instructions {
@@ -243,8 +253,8 @@ header .title {
   transform: translate(-50%, -25%);
   width: 30%;
 
-  background-color: white;
-  color: black;
+  background-color: mediumseagreen;
+  color: ghostwhite;
   font-size: 16px;
   padding: 5rem;
   border-radius: 5px;
@@ -254,5 +264,53 @@ header .title {
 
 p.center {
   font-size: 20px;
+  text-align: center;
+}
+
+.close--feedback {
+  color: ghostwhite;
+}
+
+.stats--modal {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  width: 50%;
+
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  font-family: 'Palatino Linotype';
+  padding: 5rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.stats--container {
+  display: flex;
+}
+
+.stat--item {
+  flex: 1;
+}
+
+.stat--item .value {
+  font-size: 36px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: 0.05em;
+  font-variant-numeric: proportional-nums;
+}
+
+.stat--item .label {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }

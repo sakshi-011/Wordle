@@ -13,13 +13,23 @@
   <body>
     <div id="game">
       <header>
-        <img
-          class="img-help"
-          src="img/question-mark.png"
-          alt="Question mark"
-          height="35"
-        />
+        <div clas="menu--left">
+          <img
+            class="img-help"
+            src="img/question-mark.png"
+            alt="Question mark"
+            height="35"
+          />
+        </div>
         <div class="title">Guess the Word</div>
+        <div class="menu--right">
+          <img
+            class="img-stats"
+            src="img/stats-icon.png"
+            alt="Statistics"
+            height="35"
+          />
+        </div>
       </header>
       <div class="input--container"></div>
       <div class="alert">
@@ -75,6 +85,7 @@
           <p><strong>Have a great game!</strong></p>
         </div>
       </div>
+      <div class="stats--modal hidden"></div>
       <div class="feedback"></div>
     </div>
     <div class="overlay hidden"></div>

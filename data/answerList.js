@@ -1452,7 +1452,6 @@ const answerList = [
   'races',
   'racks',
   'radar',
-  'radii',
   'radio',
   'radon',
   'rafts',
