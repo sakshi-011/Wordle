@@ -94,7 +94,7 @@ header .title {
   text-transform: uppercase;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+  font-size: 30px;
   font-weight: bold;
   transition: transform 0.3s;
 }
