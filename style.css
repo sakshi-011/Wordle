@@ -23,6 +23,7 @@ body {
   font-weight: 300;
   color: #444;
   line-height: 1.5;
+  height: 100vh;
 }
 
 #game {
