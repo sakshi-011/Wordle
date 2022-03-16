@@ -16,6 +16,7 @@
 html {
   font-size: 60%;
   box-sizing: border-box;
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -23,13 +24,13 @@ body {
   font-weight: 300;
   color: #444;
   line-height: 1.5;
-  min-height: 100vh;
 }
 
 #game {
   width: 100%;
   max-width: var(--game-max-width);
   margin: 0 auto;
+  min-height: 100vh;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -51,7 +52,7 @@ body {
 }
 
 header {
-  height: 7vh;
+  height: 60px;
   display: flex;
   border-bottom: 1px solid;
   border-color: var(--border-color-two);
@@ -71,7 +72,8 @@ header .title {
 
 .input--container {
   width: 75%;
-  height: 60vh;
+  height: 56.5vh;
+  max-height: 500px;
   margin: 1.5rem auto 3rem auto;
   display: grid;
   grid-template-rows: repeat(6, 1fr);
@@ -94,7 +96,7 @@ header .title {
   text-transform: uppercase;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
+  font-size: 48px;
   font-weight: bold;
   transition: transform 0.3s;
 }
@@ -102,6 +104,10 @@ header .title {
 .img-help {
   position: absolute;
   top: 1.2rem;
+}
+
+.img-help:hover {
+  cursor: pointer;
 }
 
 .menu--right {
@@ -119,7 +125,7 @@ header .title {
 }
 
 .instructions {
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .rules--modal {
@@ -127,7 +133,7 @@ header .title {
   top: 30%;
   left: 50%;
   transform: translate(-50%, -25%);
-  width: 70%;
+  width: 45%;
 
   background-color: white;
   color: black;
@@ -191,7 +197,7 @@ header .title {
 .keyboard--row {
   display: flex;
   width: 100%;
-  margin: 0 auto 8px;
+  margin: 0 auto 6px;
 }
 
 .keyboard--btn.correct {
@@ -216,7 +222,7 @@ header .title {
   text-transform: uppercase;
   font-weight: bold;
   margin: 0 6px 0 0;
-  height: 5vh;
+  height: 5.6vh;
   border-radius: 5px;
   cursor: pointer;
   background-color: #cdcdcd;
@@ -230,17 +236,17 @@ header .title {
 .alert {
   left: 0;
   margin: 5% auto;
-  max-width: calc(var(--game-max-width) * 0.45);
+  max-width: calc(var(--game-max-width) * 0.55);
   position: fixed;
   right: 0;
   text-align: center;
-  top: 200px;
+  top: 120px;
   z-index: 1000;
 }
 
 .alert--message {
   display: none;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: bold;
   color: white;
   background-color: black;
@@ -263,7 +269,7 @@ header .title {
 }
 
 p.center {
-  font-size: 15px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -296,7 +302,7 @@ p.center {
 }
 
 .stat--item .value {
-  font-size: 36px;
+  font-size: 34px;
   font-weight: 400;
   display: flex;
   align-items: center;
@@ -312,4 +318,97 @@ p.center {
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+/* Mobile */
+@media screen and (max-width: 500px) {
+  header .title {
+    top: 1.2%;
+    font-size: 26px;
+  }
+
+  .input--container {
+    max-height: 425px;
+  }
+
+  .cell {
+    font-size: 38px;
+  }
+
+  .instructions {
+    font-size: 12px;
+  }
+
+  .rules--modal {
+    top: 25%;
+    transform: translate(-50%, -25%);
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .rules--modal h2 {
+    font-size: 22px;
+  }
+
+  .example--tile {
+    width: 30px;
+  }
+
+  .stats--modal {
+    top: 25%;
+  }
+
+  .stats--modal h2 {
+    font-size: 18px;
+  }
+
+  .stat--item {
+    margin: 0 1rem;
+  }
+
+  .stat--item .value {
+    font-size: 26px;
+    font-weight: 400;
+  }
+
+  .stat--item .label {
+    font-size: 12px;
+  }
+
+  .feedback--modal {
+    top: 25%;
+    font-size: 14px;
+    padding: 4rem;
+    width: 70%;
+  }
+
+  .feedback--modal h1 {
+    font-size: 16px;
+  }
+
+  p.center {
+    font-size: 12px;
+  }
+}
+
+/* Tablets */
+@media screen and (max-width: 900px) and (min-width: 500px) {
+  .instructions {
+    font-size: 18px;
+  }
+
+  .rules--modal {
+    top: 23%;
+    width: 70%;
+    transform: translate(-50%, -25%);
+    padding: 3rem;
+  }
+
+  .rules--modal h2 {
+    font-size: 26px;
+  }
+
+  .example--tile {
+    width: 32px;
+  }
 }
