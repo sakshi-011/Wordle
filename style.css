@@ -333,7 +333,7 @@ p.center {
 
   .cell {
     font-size: 34px;
-    max-height: 14vh;
+    height: 62px;
   }
 
   .keyboard--row {
@@ -404,6 +404,11 @@ p.center {
 @media screen and (max-width: 900px) and (min-width: 500px) {
   .instructions {
     font-size: 18px;
+  }
+
+  .cell {
+    font-size: 38px;
+    height: 72px;
   }
 
   .rules--modal {

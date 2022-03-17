@@ -199,13 +199,11 @@ const createFeedbackModal = function() {
 
 const hideFeedbackModal = function() {
   document.querySelector('.feedback--modal').classList.add('hidden');
-  overlay.classList.add('hidden');
 };
 
 const showFeedbackModal = function() {
   createFeedbackModal();
   document.querySelector('.feedback--modal').classList.remove('hidden');
-  overlay.classList.remove('hidden');
   document
     .querySelector('.close--feedback')
     .addEventListener('click', hideFeedbackModal);
