@@ -72,7 +72,7 @@ header .title {
 
 .input--container {
   width: 75%;
-  height: 500px;
+  height: 50vh;
   margin: 1.5rem auto 3rem auto;
   display: grid;
   grid-template-rows: repeat(6, 1fr);
@@ -98,6 +98,7 @@ header .title {
   font-size: 48px;
   font-weight: bold;
   transition: transform 0.3s;
+  max-height: 65px;
 }
 
 .img-help {
@@ -333,6 +334,7 @@ p.center {
 
   .cell {
     font-size: 40px;
+    max-height: 56px;
   }
 
   .keyboard--row {
@@ -409,6 +411,7 @@ p.center {
 
   .cell {
     font-size: 40px;
+    max-height: 56px;
   }
 
   .rules--modal {
