@@ -73,6 +73,7 @@ const hideRulesModal = function() {
 };
 
 const showRulesModal = function() {
+  if (document.querySelector('.feedback--modal')) hideFeedbackModal();
   modalRules.classList.remove('hidden');
   overlay.classList.remove('hidden');
   setTimeout(_ => exampleTiles[1].classList.add('correct', 'flip'), 500);
@@ -87,10 +88,17 @@ function answerGenerator() {
 
 //Creating statistics modal
 function createStatsModal() {
-  statsMap.set('Played', 0);
-  statsMap.set('Wins', 0);
-  statsMap.set('Current Streak', 0);
-  statsMap.set('Max Streak', 0);
+  const storedStats = new Map(
+    Object.entries(JSON.parse(localStorage.getItem('stats')))
+  );
+  if (storedStats) {
+    statsMap = storedStats;
+  } else {
+    statsMap.set('Played', 0);
+    statsMap.set('Wins', 0);
+    statsMap.set('Current Streak', 0);
+    statsMap.set('Max Streak', 0);
+  }
   statsModal.innerHTML = '';
   let i = 0;
   const html = `<button class="close--modal close--stats">X</button>
@@ -146,6 +154,7 @@ const hideStatsModal = function() {
 };
 
 const showStatsModal = function() {
+  if (document.querySelector('.feedback--modal')) hideFeedbackModal();
   statsModal.classList.remove('hidden');
   overlay.classList.remove('hidden');
 };
@@ -157,7 +166,12 @@ btnStats.addEventListener('click', showStatsModal);
 
 //Update stats modal
 const updateStatsModal = function(isWin) {
-  const statsArray = Array.from(statsMap.values());
+  const statsArray = [
+    statsMap.get('Played'),
+    statsMap.get('Wins'),
+    statsMap.get('Current Streak'),
+    statsMap.get('Max Streak')
+  ];
   statsMap.set('Played', ++statsArray[0]);
   if (isWin) {
     statsMap.set('Wins', ++statsArray[1]);
@@ -171,6 +185,7 @@ const updateStatsModal = function(isWin) {
     statsMap.set('Current Streak', 0);
     statsArray[2] = 0;
   }
+  localStorage.setItem('stats', JSON.stringify(Object.fromEntries(statsMap)));
   document.querySelectorAll('.value').forEach(stat => {
     stat.textContent = statsArray[stat.dataset.index];
   });
@@ -292,10 +307,59 @@ const compareAnswers = function(tempWord) {
   return comparisonResult;
 };
 
+//Promisifying setTimeout
+const wait = function(ms) {
+  return new Promise(function(resolve) {
+    setTimeout(resolve, ms);
+  });
+};
+
+//Colour tiles according to the answer
+const displayResults = async function(tempWord, comparisonResult) {
+  const allCells = currentRow.querySelectorAll('.cell');
+  let i = 0;
+  for (let tile of allCells) {
+    const key = document.querySelector(`[data-key=${tempWord.charAt(i)}]`);
+    if (comparisonResult[i] === 1) {
+      tile.classList.add('correct', 'flip');
+      key.classList.remove('misplaced', 'wrong');
+      key.classList.add('correct');
+    } else if (comparisonResult[i] === 2) {
+      tile.classList.add('misplaced', 'flip');
+      if (!key.classList.contains('correct')) key.classList.add('misplaced');
+    } else if (comparisonResult[i] === -1) {
+      tile.classList.add('wrong', 'flip');
+      if (
+        !key.classList.contains('correct') &&
+        !key.classList.contains('misplaced')
+      )
+        key.classList.add('wrong');
+    }
+    tile.dataset.state = 'set';
+    i++;
+    await wait(250);
+  }
+  if (tempWord === answer) {
+    state = 'win';
+    displayConfetti();
+    updateStatsModal(true);
+    showFeedbackModal();
+  }
+  if (currentRowNumber < numberOfTrails - 1) {
+    currentRow = document.querySelector(`.input--${++currentRowNumber}`);
+  } else if (state !== 'win') {
+    state = 'lose';
+    updateStatsModal(false);
+    showFeedbackModal();
+  }
+};
+
 //Handler for 'enter' pressed
 function enterPressed() {
   if (state !== 'playing') {
     hideFeedbackModal();
+    hideRulesModal();
+    hideStatsModal();
     reset = true;
     init();
     return;
@@ -310,41 +374,7 @@ function enterPressed() {
     }
     currentRow.dataset.state = 'set';
     let comparisonResult = compareAnswers(tempWord);
-    currentRow.querySelectorAll('.cell').forEach((tile, i) => {
-      setTimeout(_ => {
-        const key = document.querySelector(`[data-key=${tempWord.charAt(i)}]`);
-        if (comparisonResult[i] === 1) {
-          tile.classList.add('correct', 'flip');
-          key.classList.remove('misplaced', 'wrong');
-          key.classList.add('correct');
-        } else if (comparisonResult[i] === 2) {
-          tile.classList.add('misplaced', 'flip');
-          if (!key.classList.contains('correct'))
-            key.classList.add('misplaced');
-        } else if (comparisonResult[i] === -1) {
-          tile.classList.add('wrong', 'flip');
-          if (
-            !key.classList.contains('correct') &&
-            !key.classList.contains('misplaced')
-          )
-            key.classList.add('wrong');
-        }
-        tile.dataset.state = 'set';
-      }, i * 250);
-    });
-    if (tempWord === answer) {
-      state = 'win';
-      displayConfetti();
-      updateStatsModal(true);
-      showFeedbackModal();
-    }
-    if (currentRowNumber < numberOfTrails - 1) {
-      currentRow = document.querySelector(`.input--${++currentRowNumber}`);
-    } else if (state !== 'win') {
-      state = 'lose';
-      updateStatsModal(false);
-      showFeedbackModal();
-    }
+    displayResults(tempWord, comparisonResult);
   }
 }
 
