@@ -88,11 +88,10 @@ function answerGenerator() {
 
 //Creating statistics modal
 function createStatsModal() {
-  const storedStats = new Map(
-    Object.entries(JSON.parse(localStorage.getItem('stats')))
-  );
+  const storedStats = localStorage.getItem('stats');
+
   if (storedStats) {
-    statsMap = storedStats;
+    statsMap = new Map(Object.entries(JSON.parse(storedStats)));
   } else {
     statsMap.set('Played', 0);
     statsMap.set('Wins', 0);
