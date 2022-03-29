@@ -371,6 +371,7 @@ function enterPressed() {
       displayAlert('Enter a valid word 😊');
       return;
     }
+    if (currentRow.dataset.state === 'set') return;
     currentRow.dataset.state = 'set';
     let comparisonResult = compareAnswers(tempWord);
     displayResults(tempWord, comparisonResult);
